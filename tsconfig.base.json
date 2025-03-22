@@ -1,0 +1,43 @@
+{
+    "exclude": [
+        "node_modules",
+        "src"
+    ],
+    "compilerOptions": {
+        "incremental": true,
+        "composite": true,
+        "sourceMap": false,
+        "declarationMap": false,
+        "declaration": true,
+        "lib": [],
+        "outDir": "./dist",
+        "types": [],
+        "rootDir": "./",
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        // Type assertion
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "strictBuiltinIteratorReturn": true,
+        "noImplicitThis": true,
+        "useUnknownInCatchVariables": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "exactOptionalPropertyTypes": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "allowUnusedLabels": true,
+        "allowUnreachableCode": true,
+        // Completeness (IDK, it's written in the initial `tsconfig.json`)
+        "skipLibCheck": true
+    }
+}

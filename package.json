@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "@swc-node/core": "^1.13.3",
+    "@swc-node/register": "^1.10.10",
+    "@swc/register": "^0.1.10",
+    "@textstream/core": "^0.3.1",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.13.11",
+    "chalk": "^5.4.1",
+    "cli-argument-helper": "^2.3.0",
+    "markdown-it": "^14.1.0",
+    "node-fetch": "^3.3.2",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

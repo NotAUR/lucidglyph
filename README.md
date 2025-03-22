@@ -1,4 +1,4 @@
-# freetype-envision for Arch Linux
+# [lucidglyph](https://github.com/maximilionous/lucidglyph) for Arch Linux
 
-My personal `PKGBUILD` for installing the [freetype-envision](https://github.com/maximilionus/freetype-envision) package for Arch Linux on my system.
+My personal `PKGBUILD` and patches to package and install the [lucidglyph](https://github.com/maximilionus/freetype-envision) on Arch Linux correctly.
 

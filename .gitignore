@@ -3,3 +3,17 @@
 /pkg
 /*.tar.gz
 /freetype-envision
+/*-build.log.*
+/*-build.log
+/*-check.log
+/*-check.log.*
+/*-package.log
+/*-package.log.*
+/*-package.log
+/*-prepare.log
+/*-prepare.log.*
+/logpipe.*
+/lucidglyph
+
+# Node.js
+/node_modules
