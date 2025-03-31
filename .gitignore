@@ -1,3 +1,5 @@
+# Built package folders
+/*.sig
 /*.zst
 /src
 /pkg
