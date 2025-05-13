@@ -62,11 +62,6 @@ build() {
   done
 }
 
-check() {
-  cd "$srcdir/$folder_name" || exit 1
-  ls
-}
-
 package() {
   cd "$srcdir/$folder_name" || exit 1
 
