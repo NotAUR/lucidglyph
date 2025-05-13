@@ -1,20 +1,28 @@
 pkgname=("lucidglyph")
-pkgver=0.9.1
+pkgver=0.10.1
 pkgrel=1
 arch=('any')
 source=(
   "git+https://github.com/maximilionus/lucidglyph#tag=v$pkgver"
-  "0001-Add-support-for-DESTDIR-environment-variable.patch"
-  "0002-Add-support-for-changing-DEST_ENVIRONMENT-environmen.patch"
+  "0001-allow-changing-uninstall-file-absolute-path.patch"
+  "0002-allow-changing-absolute-environment-file-destination.patch"
 )
 validpgpkeys=(
   "B7E510C142B88F4B"
 )
-md5sums=('SKIP' 'SKIP' "SKIP")
+md5sums=(
+  'SKIP'
+  # ./0001-allow-changing-uninstall-file-absolute-path.patch
+  'd8acbd5c286a8d3fcc9bfb523e626a5a'
+  # ./0002-allow-changing-absolute-environment-file-destination.patch
+  'bad5d9e406fbccfd55cf56478d73ed56'
+)
 sha512sums=(
   'SKIP'
-  '55841abd90118e0e04f4fdaef72076e6b91c519172516bb9a88c2866a7f87eaae564a125af1effe933cb9fccad9c4b56e2d9503dc46ddd131ff6f9fd0fc39031' # 0001-Add-support-for-DESTDIR-environment-variable.patch
-  '83d12bd1bcd12f4d36a1e8db69a7008c670cfad2ae08f4e8cef68c9d62bc86f2e986a222895dba270693285e240201c65792048d0ddf2e8185ca53162da9eeda' # 0002-Add-support-for-changing-DEST_ENVIRONMENT-environmen.patch
+  # ./0001-allow-changing-uninstall-file-absolute-path.patch
+  '79ac53609f0fe97f56202ea12f9a7f755c7edd6de284b7537ed61ab4066228256baae47447dfe8c8f35964418a457ec8c67207fa7b7b37891b675c572169be5b'
+  # ./0002-allow-changing-absolute-environment-file-destination.patch
+  'bd7574b55f26a4482b6dc9a5e6da38d3133f0b24070ec7b399e3c482d5dd662a21a6db53bba3ab3f17dad86d6cf993318e3eaf0a614996c9d49b97f5c3bc2d4d'
 )
 makedepends=('git')
 depends=(
@@ -43,12 +51,12 @@ build() {
 
   local patch_files
   patch_files=(
-    "$srcdir/0001-Add-support-for-DESTDIR-environment-variable.patch"
-    "$srcdir/0002-Add-support-for-changing-DEST_ENVIRONMENT-environmen.patch"
+    "$srcdir/0001-allow-changing-uninstall-file-absolute-path.patch"
+    "$srcdir/0002-allow-changing-absolute-environment-file-destination.patch"
   )
 
   for patch_file in "${patch_files[@]}"; do
-    patch -p1 < "$patch_file" || exit 1
+    patch -p1 <"$patch_file" || exit 1
   done
 }
 
@@ -60,58 +68,22 @@ check() {
 package() {
   cd "$srcdir/$folder_name" || exit 1
 
-  # Create directories on `$pkgdir`
-  local directories
-  directories=(
-    "/etc"
-    "/etc/environment.d"
-    "/etc/fonts/conf.d"
-    "/usr/share/lucidglyph"
-  )
-
   local lucid_glyph_environment_file
-  lucid_glyph_environment_file="/etc/environment.d/lucidglyph.conf"
+  lucid_glyph_environment_file="$pkgdir/etc/environment.d/lucidglyph.conf"
 
-  local files
-  files=(
-    "$lucid_glyph_environment_file"
+  # Create the directory if it doesn't exist
+  install -d "$(dirname "$lucid_glyph_environment_file")"
+
+  local uninstaller_file_location
+  # Point it to `/dev/null` to avoid having to delete the file afterwards
+  uninstaller_file_location="/tmp/lucidglyph-uninstaller"
+
+  local env_args
+  env_args=(
+    "DEST_UNINSTALL_FILE_ABSOLUTE_PATH=$uninstaller_file_location"
+    "DEST_ENVIRONMENT=$lucid_glyph_environment_file"
+    "DESTDIR=$pkgdir"
   )
 
-  local install_args
-  install_args=()
-
-  # Create directories
-  for directory in "${directories[@]}"; do
-    install_args=(
-      --verbose --mode=755 --directory "$pkgdir/$directory"
-    )
-    install "${install_args[@]}" || exit 1
-  done
-
-  # Create files
-  for file in "${files[@]}"; do
-    install_args=(
-      --verbose
-      --mode=644
-      # create all leading components of DEST except the last,
-      # or all components of --target-directory, then copy SOURCE to DEST
-      -D
-      /dev/null
-      "$pkgdir/$file"
-    )
-    install "${install_args[@]}" || exit 1
-  done
-
-  env DESTDIR="$pkgdir" DEST_ENVIRONMENT="$pkgdir/$lucid_glyph_environment_file" bash ./lucidglyph.sh install || exit 1
-
-  # Clean up
-  local clean_files
-  clean_files=(
-    # Remove the `uninstaller.sh`, we do not need it since we're using ALPM
-    "$pkgdir/usr/share/lucidglyph/uninstaller.sh"
-  )
-
-  for clean_file in "${clean_files[@]}"; do
-    rm --verbose "$clean_file" || exit 1
-  done
+  env "${env_args[@]}" ./lucidglyph.sh install || exit 1
 }
