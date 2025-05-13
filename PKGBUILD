@@ -1,9 +1,12 @@
+# The name of the folder that contains the source files
+folder_name="lucidglyph"
+
 pkgname=("lucidglyph")
 pkgver=0.10.1
 pkgrel=1
 arch=('any')
 source=(
-  "git+https://github.com/maximilionus/lucidglyph#tag=v$pkgver"
+  "$folder_name::git+https://github.com/maximilionus/lucidglyph#tag=v$pkgver"
   "0001-allow-changing-uninstall-file-absolute-path.patch"
   "0002-allow-changing-absolute-environment-file-destination.patch"
 )
@@ -44,7 +47,6 @@ replaces=(
 )
 license=("GPL")
 url="https://github.com/maximilionus/lucidglyph"
-folder_name="lucidglyph"
 
 build() {
   cd "$srcdir/$folder_name" || exit 1
