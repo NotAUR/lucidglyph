@@ -2,7 +2,7 @@
 folder_name="lucidglyph"
 
 pkgname=("lucidglyph")
-pkgver=0.10.1
+pkgver=0.11.0
 pkgrel=1
 arch=('any')
 source=(
